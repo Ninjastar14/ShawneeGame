@@ -2,6 +2,7 @@
 import flash.events.KeyboardEvent;
 import flash.events.Event;
 import flash.ui.Keyboard;
+import flash.utils.Timer;
 
 var keyPressed: uint;
 // Moving Variables
@@ -9,19 +10,21 @@ var shiftPressed: Boolean;
 var aPressed: Boolean;
 var dPressed: Boolean;
 var walkSpeed: Number = 5;
-var runSpeed: Number = 8;
+var runSpeed: Number = 1;
+
 // Attacking Variables
 var spacePressed: Boolean;
 var sPressed: Boolean;
-
-function initializeGame(): void 
+var oPressed:Boolean;
+	
+function initializeGame():void 
 {
+	
 	sPressed = false;
 	aPressed = false;
 	dPressed = false;
 	spacePressed = false;
 	shiftPressed = false;
-	
 	stage.addEventListener(KeyboardEvent.KEY_DOWN, pressKey);
 	stage.addEventListener(KeyboardEvent.KEY_UP, releaseKey);
 }
@@ -36,7 +39,9 @@ function pressKey(event: KeyboardEvent): void
 	if (keyPressed == Keyboard.A) 
 	{
 		aPressed = true;
-		this.Lloyd.gotoAndPlay(13);
+		if(Lloyd.currentLabel!="walking"){
+		Lloyd.gotoAndPlay("walking");
+		}
 	}
 	if (keyPressed == Keyboard.S) 
 	{
@@ -45,17 +50,29 @@ function pressKey(event: KeyboardEvent): void
 	if (keyPressed == Keyboard.D) 
 	{
 		dPressed = true;
-		this.Lloyd.gotoAndPlay(13);
+		if(Lloyd.currentLabel!="walking"){
+		Lloyd.gotoAndPlay("walking");
+		}
 	}
 	if (keyPressed == Keyboard.SPACE) 
 	{
 		spacePressed = true;
+		
 	}
 	if (keyPressed == Keyboard.SHIFT)
 	{
 		shiftPressed = true;
-		this.Lloyd.gotoAndPlay(25);
+		
+		
 	}
+	if (keyPressed == Keyboard.O)
+	{
+		oPressed=true;
+		if(Lloyd.currentLabel!="attack1"){
+		Lloyd.gotoAndPlay("attack1");
+		}
+		}
+			
 	Lloyd.addEventListener(Event.ENTER_FRAME, moving);
 }
 
@@ -69,18 +86,24 @@ function releaseKey(event: KeyboardEvent): void
 		if (thisKey == Keyboard.A) 
 		{
 			aPressed = false;
-			this.Lloyd.gotoAndPlay(1);
+			Lloyd.gotoAndPlay("idle");
 		}
 		if (thisKey == Keyboard.D) 
 		{
 			dPressed = false;
-			this.Lloyd.gotoAndPlay(1);
+			Lloyd.gotoAndPlay("idle");
 		}
 		if (thisKey == Keyboard.SHIFT)
 		{
 			shiftPressed = false;
-			this.LLoyd.gotoAndPlay(1);
+			 Lloyd.gotoAndPlay("idle");
 		}
+		if(thisKey == Keyboard.O)
+		{
+			oPressed=false;
+			 Lloyd.gotoAndPlay("idle");
+		}
+		
 }
 
 /***********************
@@ -103,13 +126,23 @@ function moving(event: Event): void
 	// Running Speed
 	if (dPressed && shiftPressed || shiftPressed && dPressed) 
 	{
+		if(Lloyd.currentLabel!="run"){
+		Lloyd.gotoAndPlay("run");
+		}
 		Lloyd.x += runSpeed;
 		Lloyd.scaleX = 1;
+	
 	}
+	
 	if (aPressed && shiftPressed || shiftPressed && aPressed) 
 	{
+		if(Lloyd.currentLabel!="run"){
+		Lloyd.gotoAndPlay("run");
+		}
 		Lloyd.x -= runSpeed;
 		Lloyd.scaleX = -1;
+	
+		
 	}
 }
 initializeGame();
